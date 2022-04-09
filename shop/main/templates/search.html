@@ -1,0 +1,62 @@
+{% extends 'main_page.html' %}
+{% load bootstrap3 %}
+{% block content %}
+<h1 class="search_title">Каталог товаров</h1>
+<div class="search_categories">
+    <h2 style="margin-left: 10%">Найдено {{ len_products }} товара в категориях</h2>
+    {% for category in categories %}
+    <p>{{ category }}</p>
+    {% endfor %}
+</div>
+<div class="search_goods">
+
+    {% for product in object_list %}
+
+    <table width="25%">
+        <tr>
+            <td><a href="{% url 'main:productdetail' product.id %}">{{ product.name }}</a><br></td>
+        </tr>
+        <tr>
+            <td><img src="{{ product.preview.url }}" height="300" width="300" alt=""><br></td>
+        </tr>
+        <tr>
+            <td><h2>{{product.price}}</h2></td>
+        </tr>
+    </table>
+
+    {% endfor %}
+
+
+</div>
+{% bootstrap_pagination object_list url=last_question %}
+
+
+<div class="name_block">
+    <h2 style="float: left">НЕДАВНО СМОТРЕЛИ</h2>
+    <a style="float: right" href="#">Все</a>
+</div>
+<div class="block_goods">
+    {% for i in recently_viewed %}
+    <div>
+        <img src="{{ i.product.preview.url }}" height="300" width="300" alt=""></br>
+        <a href="{% url 'main:productdetail' i.product.id %}">{{ i.product.name }}</a><br>
+        <h3>{{i.product.price}}</h3>
+
+        {% with total_items=favorites %}
+        {% if i.product.id in favorites.get_all_products_id %}
+        <a href="{% url 'cart:favorites_detail' %}"><p style="margin: auto">Уже в желаниях</p></a>
+        <a href="{% url 'cart:favorites_remove' i.product.id %}">Удалить</a>
+        {% else %}
+        <form action="{% url 'cart:favorites_add' i.product.id %}" method="POST">
+            {{ favorites_product_form }}
+            {% csrf_token %}
+            <input type="submit" value="Желание">
+        </form>
+        {% endif %}
+        {% endwith %}
+
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

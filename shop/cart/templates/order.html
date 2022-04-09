@@ -1,0 +1,54 @@
+{% extends 'main_page.html' %}
+{% block content %}
+<h1>Оформление заказа</h1>
+<div style="display: flex;">
+    <div class="order_form">
+        <table>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form.as_table }}
+                <tr>
+                    <td>
+                        <button>Подтвердить заказ</button>
+                    </td>
+                </tr>
+            </form>
+        </table>
+
+    </div>
+    <div style="float:right;">
+        <button><a href="{% url 'cart:virtual_order' %}">Заказ в один клик</a></button>
+        <p>Не хотите ничего заполнять? мы все сделаем за вас</p>
+    </div>
+</div>
+<div>
+    <h2>Ваш заказ</h2>
+    <table class="table_cart">
+        <tr>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Стоимость</th>
+        </tr>
+        {% for item in cart %}
+        {% with product=item.product %}
+
+        <tr>
+            <td>
+                <img src="{{ product.preview.url }}" width="100" height="70">
+            </td>
+            <td><a href="{% url 'main:productdetail' product.id %}">{{ product.name }}</a></td>
+            <td class="num"><h3>{{ item.quantity }}</h3></td>
+            <td><h3>{{ item.price }}</h3></td>
+            <td>
+                <h3>{{ item.total_price }}</h3></td>
+
+        </tr>
+
+        {% endwith %}
+        {% endfor %}
+    </table>
+    <a href="{% url 'cart:cart_detail' %}">Вернуться в корзину</a>
+</div>
+{% endblock %}

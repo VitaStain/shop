@@ -1,0 +1,59 @@
+{% extends "main_page.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Сравнение</h1>
+<table class="comparison">
+    <tr>
+        <th>&nbsp;</th>
+        {% for item in comparison %}
+        {% with product=item.product %}
+
+        <th>
+            <table>
+                <tr>
+                    <td><a href="{% url 'cart:comparison_remove' product.id %}">Удалить</a></td>
+                </tr>
+                <tr>
+                    <td>{{product.name}}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <img src="{{ product.preview.url }}" width="100" height="60"></td>
+                </tr>
+            </table>
+        </th>
+
+        {% endwith %}
+        {% endfor %}
+    </tr>
+
+    {% for category in comparison.get_categories %}
+    {% for valuename in category.valuename_set.all %}
+    <tr>
+        <td>{{valuename.name}}</td>
+        {% for item in comparison %}
+        {% with product=item.product %}
+        {% if valuename.category_id in product.category.all %}
+        <td>
+            {% for value in product.value_set.all %}
+            {% if value.value_type_id == valuename %}
+            {{ value.value }}
+        </td>
+        {% else %}
+        {% endif %}
+        {% endfor %}
+        {% else %}
+        <td></td>
+        {% endif %}
+        {% endwith %}
+        {% endfor %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+
+</table>
+<p class="text-right">
+    <a href="{% url 'main:main_page' %}" class="button light">В магазин</a>
+</p>
+{% endblock %}

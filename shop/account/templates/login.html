@@ -1,0 +1,15 @@
+{% extends 'main_page.html' %}
+{% block content %}
+<title>Login</title>
+<h1>ВХОД В ЛИЧНЫЙ КАБИНЕТ</h1>
+<table>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{form.as_table}}
+        <tr>
+            <td><a href="{% url 'account:register' %}" class="button_login">Регистрация</a></td>
+            <td><input class="button_login" type="submit" value="Войти"></td>
+        </tr>
+    </form>
+</table>
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'main_page.html' %}
+{% block content %}
+<h1 style="margin-left: 5%">Персональный кабинет</h1>
+<div class="block_userprofile">
+
+    <div class="userprofile_menu">
+        <ul>
+            <li><a href="{% url 'account:profile' %}">Личные данные</a></li>
+            <li><a href="{% url 'cart:order_list' %}">История заказов</a></li>
+            <li><a href="{% url 'cart:favorites_detail' %}">Список желаний</a></li>
+            <li><a href="">Лист ожидания</a></li>
+        </ul>
+    </div>
+    {% block user_info %}
+    <div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <table>
+                <tr>
+                    <td><p>Имя: </p></td>
+                    <td><p>{{form.username}}</p></td>
+                </tr>
+                <tr>
+                    <td><p>E-mail: </p></td>
+                    <td><p>{{form.email}}</p></td>
+                </tr>
+                <tr>
+                    <td><a href="{% url 'account:changepassword' %}">Изменить пароль</a></td>
+                </tr>
+                <tr>
+                    <td><p>{{form.send_message}}</td>
+                    <td>Получать информацию о акциях, специальных ценах и выгодных прендложениях</p></td>
+                </tr>
+                <tr>
+                    <td><p>Телефон:</p></td>
+                    <td><p>{{form.phone}}</p></td>
+                </tr>
+                <tr>
+                    <td><p>Адресс доставки: </p></td>
+                    <td><p>{{form.address}}</p></td>
+                </tr>
+            </table>
+            <input class="save_button" type="submit" value="Сохранить">
+        </form>
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}

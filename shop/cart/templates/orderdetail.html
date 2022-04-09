@@ -1,0 +1,80 @@
+{% extends 'main_page.html' %}
+{% block content %}
+<h1>Спасибо за покупку</h1>
+<table>
+    <tr>
+        <td><p>Наши операторы свяжутся с вами в ближайшее время для подтверждения заказа</p>
+            <h4>Номер Вашего заказа {{order.id}}</h4></td>
+    </tr>
+    <tr>
+        <td>Информация по оплате и доставке</td>
+    </tr>
+    <tr>
+        <td>Дата заказа: {{order.date}}</td>
+    </tr>
+    <tr>
+        <td><h4>Параметры заказа:</h4></td>
+    </tr>
+    <tr>
+        <td>
+            <table>
+                <tr>
+                    <td>E-mail:</td>
+                    <td>{{order.email}}</td>
+                </tr>
+                <tr>
+                    <td>Телефон:</td>
+                    <td>{{order.phone}}</td>
+                </tr>
+                <tr>
+                    <td>Имя:</td>
+                    <td>{{order.name}}</td>
+                </tr>
+                <tr>
+                    <td>Точка вывоза:</td>
+                    <td>{{order.shop}}</td>
+                </tr>
+                <tr>
+                    <td>Способ доставки:</td>
+                    <td>{{order.delivery_method}}</td>
+                </tr>
+                <tr>
+                    <td>Способ оплаты:</td>
+                    <td>{{order.payment_method}}</td>
+                </tr>
+                <tr>
+                    <td>Комментарий к заказу:</td>
+                    <td>{{order.comment}}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<div>
+    <h2>Информация по заказу</h2>
+    <table class="table_cart">
+        <tr>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>Количество</th>
+            <th>Цена</th>
+            <th>Стоимость</th>
+        </tr>
+        {% for item in order.order_product_set.all %}
+        <tr>
+            <td>
+                <img src="{{ item.product.preview.url }}" width="100" height="70">
+            </td>
+            <td><a href="{% url 'main:productdetail' item.product.id %}">{{ product.name }}</a></td>
+            <td class="num"><h3>{{ item.number }}</h3></td>
+            <td><h3>{{ item.product.price }}</h3></td>
+            <td>
+                <h3>{{ item.product.price }}</h3></td>
+        </tr>
+
+
+        {% endfor %}
+    </table>
+</div>
+<a href="{% url 'main:main_page' %}">Вернуться в магазин</a>
+{% endblock %}

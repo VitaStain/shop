@@ -1,0 +1,117 @@
+{% extends 'main_page.html' %}
+{% block content %}
+<div>
+    <div style="float: left;">
+        <h1>{{ product.name }}</h1>
+        <img src="{{ product.preview.url }}" alt=""><br>
+        <div>
+            <ul>
+
+                <li><a href="#" id="showDiv3">Описание</a></li>
+                <li><a href="#" id="showDiv1">Характеристики</a></li>
+                <li><a href="#">Вместе выгоднее</a></li>
+                <li><a href="#" id="showDiv2">Отзывы</a></li>
+                <li><a href="#">Серии и модификации</a></li>
+            </ul>
+        </div>
+
+
+        <div class="add_product">
+            <h2>{{ product.price }}</h2>
+            {% if product.on_sale_soon %}
+            <h3>Скоро в продаже</h3>
+            {% else %}
+            <form action="{% url 'cart:cart_add' product.id %}" method="post">
+                {{ cart_product_form }}
+                {% csrf_token %}
+                <input class="button_search" type="submit" value="В корзину">
+            </form>
+            {% endif %}
+            <div class="add_comparison_favorites">
+
+                {% with total_items=favorites %}
+                {% if product.id in favorites.get_all_products_id %}
+                <a href="{% url 'cart:favorites_detail' %}"><p style="margin: auto">Уже в желаниях</p></a>
+                <a href="{% url 'cart:favorites_remove' product.id %}">Удалить</a>
+                {% else %}
+                <form action="{% url 'cart:favorites_add' product.id %}" method="POST">
+                    {{ favorites_product_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Желание">
+                </form>
+                {% endif %}
+                {% endwith %}
+
+
+                {% with total_items=comparison %}
+                {% if product.id in comparison.get_all_products_id %}
+                <a href="{% url 'cart:comparison_detail' %}"><p style="margin: auto">Уже в сравнениях</p></a>
+                <a href="{% url 'cart:comparison_remove' product.id %}">Удалить</a>
+                {% else %}
+                <form action="{% url 'cart:comparison_add' product.id %}" method="POST">
+                    {{ comparison_product_form }}
+                    {% csrf_token %}
+                    <input type="submit" value="Сравнение">
+                </form>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+    <div class="characteristics" id="div1" hidden>
+        <table>
+            {% for detail in product.characteristic.all %}
+            <tr>
+                <td>{{ detail.name }}</td>
+                {% for i in detail.value.all %}
+                {% if i.product_id == product %}
+                <td>{{ i.value }}</td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </table>
+
+    </div>
+    <div id="div2" hidden>
+        {% if reviews %}
+        <table>
+            {% for review in reviews %}
+            <tr>
+                <td>Имя:</td>
+                <td><h2>{{ review.user }}</h2></td>
+            </tr>
+            <tr>
+                <td>Отзыв:</td>
+                <td><p>{{ review.body_review }}</p></td>
+            </tr>
+            <tr>
+                <td>Оценка:</td>
+                <td><p>{{ review.rating }}</p></td>
+            </tr>
+
+            {% endfor %}
+            <tr>
+                <td><a href="{% url 'main:review' product.id %}">Все</a></td>
+            </tr>
+        </table>
+        {% else %}
+        <h3>Пока нет ни одного отзыва</h3>
+        {% if user.is_authenticated %}
+        <a href="{% url 'main:reviewcreate' product.id %}">Оставить отзыв</a>
+        {% else %}
+        <a href="{% url 'account:login' %}">Только авторизованные пользователи могут оставлять отзывы</a>
+        {% endif %}
+        {% endif %}
+    </div>
+    <div id="div3" hidden>
+        <table>
+            <tr>
+                <td>
+                    <h3>{{ product.description }}</h3>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

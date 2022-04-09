@@ -1,0 +1,41 @@
+{% extends 'main_page.html' %}
+{% block content %}
+<table>
+    {% for review in reviews %}
+    <tr>
+        <td>Имя:</td>
+        <td><p>{{ review.user }}</p></td>
+    </tr>
+    <tr>
+        <td>Отзыв:</td>
+        <td><p>{{ review.body_review }}</p></td>
+    </tr>
+    <tr>
+        <td>Оценка:</td>
+        <td><p>{{ review.rating }}</p></td>
+    </tr>
+    {% endfor %}
+</table>
+<div>
+    <span>
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">{{page_obj.previous_page_number}}</a>
+        {% endif %}
+
+        <span>
+            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">{{page_obj.next_page_number}}</a>
+        {% endif %}
+    </span>
+</div>
+<div>
+    {% if user.is_authenticated %}
+    <a href="{% url 'main:reviewcreate' product_id %}">Оставить отзыв</a>
+    {% else %}
+    <a href="{% url 'account:login' %}">Только авторизованные пользователи могут оставлять отзывы</a>
+    {% endif %}
+</div>
+{% endblock %}

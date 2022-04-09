@@ -1,0 +1,16 @@
+{% extends 'profile.html' %}
+{% block user_info %}
+<div>
+    <h1>История заказов</h1>
+    <table>
+        {% for order in orders %}
+        <tr>
+            <td>Заказ №{{ order.id }} от {{ order.date }}</td>
+            <td>Сумма к оплате {{ order.price }}</td>
+            <td><a href="{{ order.get_absolute_url }}">Содержимое заказа</a></td>
+            <td>{{ order.state }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock %}

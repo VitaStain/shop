@@ -1,0 +1,9 @@
+{% extends 'main_page.html' %}
+{% block content %}
+<h1>Заказ в один клик</h1>
+<form action="" method="Post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>ok</button>
+</form>
+{% endblock %}

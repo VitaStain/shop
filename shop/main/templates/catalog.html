@@ -1,0 +1,31 @@
+{% extends 'main_page.html' %}
+{% block content %}
+<div class="block_goods">
+    {% for product in products %}
+    <div>
+        <img src="{{ product.preview.url }}" height="300" width="300" alt=""><br>
+        <a href="{% url 'main:productdetail' product.id %}">{{ product.name }}</a><br>
+        {% for category in product.category.all %}
+        <a href="{% url 'main:catalog' category.id %}">{{ category }}</a>
+        {% endfor %}
+    </div>
+
+
+    {% endfor %}
+</div>
+<div>
+    <span>
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">{{page_obj.previous_page_number}}</a>
+        {% endif %}
+
+        <span>
+            {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">{{page_obj.next_page_number}}</a>
+        {% endif %}
+    </span>
+</div>
+{% endblock %}
